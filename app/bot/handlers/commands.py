@@ -6,17 +6,16 @@ command_handler = Router()
 
 
 @command_handler.message(CommandStart())
-async def cmd_start(message: types.Message):
+async def start(message: types.Message):
     if not message.from_user:
         return
     
-    user, created = await User.get_or_create(id=message.from_user.id, defaults={
+    user, _ = await User.get_or_create(id=message.from_user.id, defaults={
         "first_name": message.from_user.first_name or '',
         "last_name": message.from_user.last_name or '',
         "is_premium": message.from_user.is_premium or False,
     })
 
-    await message.answer(f"Hello, {user.full_name}!")
     await message.answer("Hello! I'm your OpenAI-powered chatbot. Send me a message, and I'll generate a response for you.")
     # reply = "Hello! I'm your OpenAI-powered chatbot. Send me a message, and I'll generate a response for you."
     # await message.answer(reply)

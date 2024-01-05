@@ -3,7 +3,7 @@ from tortoise.models import Model
 
 
 class Message(Model):
-    id = fields.IntField(pk=True)
+    id = fields.BigIntField(pk=True)
     user = fields.ForeignKeyField("models.User", related_name="messages")
     text = fields.TextField()
     created_at = fields.DatetimeField(auto_now_add=True)

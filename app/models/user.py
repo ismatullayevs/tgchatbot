@@ -3,7 +3,7 @@ from tortoise import fields
 
 
 class User(Model):
-    id = fields.IntField(pk=True)
+    id = fields.BigIntField(pk=True)
     first_name = fields.CharField(max_length=255, blank=True)
     last_name = fields.CharField(max_length=255, blank=True)
     # TODO: add phone number validation

@@ -16,10 +16,7 @@ dp.include_router(command_handler)
 
 @dp.startup()
 async def on_startup(*args, **kwargs):
-    await Tortoise.init(
-        db_url=settings.DATABASE_URL,
-        modules={'models': ['app.models.user']}
-    )
+    await Tortoise.init(config=settings.DB_CONFIG)
     await Tortoise.generate_schemas()
 
 
