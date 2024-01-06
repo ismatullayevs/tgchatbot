@@ -19,6 +19,7 @@ class Settings:
 
     DATABASE_URL: str = f"postgres://{DB_USER}:{
         DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+    # DATABASE_URL: str = 'sqlite://db.sqlite3'
 
     DB_CONFIG = {
         'connections': {

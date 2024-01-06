@@ -1,7 +1,6 @@
 from tortoise.models import Model
 from tortoise import fields
 
-
 class User(Model):
     id = fields.BigIntField(pk=True)
     first_name = fields.CharField(max_length=255, blank=True)
@@ -12,6 +11,8 @@ class User(Model):
     created_at = fields.DatetimeField(auto_now_add=True)
     updated_at = fields.DatetimeField(auto_now=True)
     is_active = fields.BooleanField(default=True)
+    #TODO: move this to chat model
+    last_message = fields.OneToOneField('models.Message', related_name='user', null=True, on_delete=fields.SET_NULL)
 
     @property
     def full_name(self):
