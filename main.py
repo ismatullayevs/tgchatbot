@@ -1,12 +1,12 @@
 from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
 from config.settings import settings
-from app.bot.handlers.command import command_handler
-from app.bot.handlers.message import message_handler
+from app.bot.handlers.commands import command_handler
+from app.bot.handlers.messages import message_handler
 from tortoise import Tortoise
 import asyncio
-import sys
 import logging
+import sys
 
 
 logging.basicConfig(level=logging.INFO)
@@ -32,5 +32,4 @@ async def main():
 
 
 if __name__ == "__main__":
-    logging.basicConfig(level=logging.DEBUG, stream=sys.stdout)
     asyncio.run(main())

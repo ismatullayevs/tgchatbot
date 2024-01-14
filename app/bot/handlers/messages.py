@@ -2,7 +2,7 @@ from aiogram import types, Router, F
 from aiogram.enums import ParseMode
 from app.models.user import User
 from app.models.message import Message
-from app.utils import get_history
+from app.bot.utils import get_history, escape_characters
 from openai import OpenAI
 from config.settings import settings
 
@@ -18,21 +18,29 @@ async def prompt(message: types.Message):
     reply_id = message.reply_to_message.message_id if message.reply_to_message else user.last_message.message_id if user.last_message else None
     reply = await Message.get_or_none(message_id=reply_id, chat_id=message.chat.id)
     history = await get_history(reply, message.chat.id) if reply else []
+    
+    if settings.MAX_HISTORY and len(history) >= settings.MAX_HISTORY:
+        return await message.answer("Sorry, your conversation history is too long (20 messages). Please start a /newchat.")
+    
     history.append({"role": "user", "content": message.text})
+    if settings.SYSTEM_MESSAGE:
+        history.insert(
+            0, {"role": "system", "content": settings.SYSTEM_MESSAGE})
 
     response = client.chat.completions.create(
         messages=history,
         model='gpt-3.5-turbo',
     )
     response_text = response.choices[0].message.content
-    response_msg = await message.answer(str(response_text), parse_mode=ParseMode.MARKDOWN)
+    if not response_text: return
 
-    msg = await Message.create(message_id=message.message_id, chat_id=message.chat.id, 
-                         text=message.text, role='user', replied_to=reply)
-    
+    response_msg = await message.answer(escape_characters(response_text), parse_mode=ParseMode.MARKDOWN_V2)
+
+    msg = await Message.create(message_id=message.message_id, chat_id=message.chat.id,
+                               text=message.text, role='user', replied_to=reply)
+
     resp = await Message.create(message_id=response_msg.message_id, chat_id=message.chat.id,
-                         text=response_text, role='assistant', replied_to=msg)
-    
+                                text=response_text, role='assistant', replied_to=msg)
+
     user.last_message = resp
     await user.save()
-    

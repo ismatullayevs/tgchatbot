@@ -12,7 +12,7 @@ services:
       - db
     volumes:
       - .:/app
-    command: python3 main.py
+    command: python3 run.py
 
   db:
     image: postgres:16
