@@ -18,10 +18,11 @@ async def prompt(message: types.Message):
     reply_id = message.reply_to_message.message_id if message.reply_to_message else user.last_message.message_id if user.last_message else None
     reply = await Message.get_or_none(message_id=reply_id, chat_id=message.chat.id)
     history = await get_history(reply, message.chat.id) if reply else []
-    
-    if settings.MAX_HISTORY and len(history) >= settings.MAX_HISTORY:
-        return await message.answer("Sorry, your conversation history is too long (20 messages). Please start a /newchat.")
-    
+
+    MX = settings.MAX_HISTORY
+    if MX and len(history) >= MX:
+        return await message.answer(f"Sorry, your conversation history is too long ({MX} messages). Please start a /newchat.")
+
     history.append({"role": "user", "content": message.text})
     if settings.SYSTEM_MESSAGE:
         history.insert(
@@ -32,7 +33,8 @@ async def prompt(message: types.Message):
         model='gpt-3.5-turbo',
     )
     response_text = response.choices[0].message.content
-    if not response_text: return
+    if not response_text:
+        return
 
     response_msg = await message.answer(escape_characters(response_text), parse_mode=ParseMode.MARKDOWN_V2)
 

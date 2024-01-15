@@ -13,7 +13,7 @@ async def get_history(message, chat_id: int):
 
 
 def escape_characters(text: str):
-    special_characters = ['_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!']
+    special_characters = ['_', '*', '[', ']', '(', ')', '~', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!']
     
     escaped_text = ''
     for char in text:

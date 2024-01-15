@@ -34,8 +34,9 @@ def get_env(key: str, default: str,
 def get_env(key: str, default: str | None = None, allow_none: bool = False, cast: Callable[[str], T] | Callable[[str | None], T] | None = None) -> str | None | T:
     val = os.getenv(key, default)
     if val is None and not allow_none:
-        raise ValueError(f"Environment variable {key} is not set with {allow_none}")
-    return cast(val) if cast else val # type: ignore
+        raise ValueError(f"Environment variable {
+                         key} is not set with {allow_none}")
+    return cast(val) if cast else val  # type: ignore
 
 
 def boolean(value: str):
