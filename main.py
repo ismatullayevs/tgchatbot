@@ -6,7 +6,6 @@ from app.bot.handlers.messages import message_handler
 from tortoise import Tortoise
 import asyncio
 import logging
-import sys
 
 
 logging.basicConfig(level=logging.INFO)

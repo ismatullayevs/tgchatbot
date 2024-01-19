@@ -3,11 +3,11 @@ from aiogram.enums import ParseMode
 from app.models.user import User
 from app.models.message import Message
 from app.bot.utils import get_history, escape_characters
-from openai import OpenAI
 from config.settings import settings
+from app.openai import client
+
 
 message_handler = Router()
-client = OpenAI(api_key=settings.OPENAI_API_KEY)
 
 
 @message_handler.message(F.text)
